@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <h1>💡 Info</h1> -->
+    <ul style="padding: 0;">
+        <li>데일리 퀴즈 <span class="count" id="daily"></span></li>
+        <li>멘토링 <span class="count" id="mentor"></span></li>
+        <li>프로그래머스 <span class="count" id="fri"></span></li>
+        <li>위클리 페이퍼 <span class="count" id="sat"></span></li>
+        <li class="f-12">진도 기록 시 ‘스프린트 미션’은 진행도에 따라 ‘레슨’ 값을 0~50으로 지정합니다.</li>
+    </ul>
+</body>
+</html>
+
+<style>
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+    :root {
+        
+    }
+
+    .f-12 { font-size: 12px; color: hsl(0, 0%, 60%); }
+    body {
+        font-family: 'Pretendard Variable';
+        color: #555555;
+        border: 1px #dcd0e9 solid;
+        border-radius: 10px;
+        padding: 2px 32px;
+    }
+
+    h1 {
+        color: rgb(135, 0, 219)
+    }
+
+    li {
+        line-height: 150%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 8px 0;
+        font-weight: 500;
+    }
+
+    li span {
+        background: rgb(247, 231, 255);
+        border-radius: 100px;
+        color: rgb(109, 0, 142);
+        font-size: 14px;
+        font-weight: 600;
+        padding: 2px 14px;
+    }
+    
+</style>
+
+<script>
+function getDday(daysArray, targetHour) {
+    const now = new Date();
+    
+    // 입력 유효성 검사
+    if (!Array.isArray(daysArray) || daysArray.length !== 7 || daysArray.some(d => d !== 0 && d !== 1)) {
+        throw new Error('유효하지 않은 요일 배열입니다.');
+    }
+    if (typeof targetHour !== 'number' || targetHour < 1 || targetHour > 24) {
+        throw new Error('유효하지 않은 시간입니다.');
+    }
+    
+    const adjustedHour = targetHour === 24 ? 0 : targetHour;
+    const jsDay = now.getDay(); // 0(일) ~ 6(토)
+    const currentArrayIndex = (jsDay - 1 + 7) % 7; // 요일 배열 인덱스 (0: 월, 6: 일)
+    
+    let targetDate;
+    
+    if (daysArray[currentArrayIndex] === 1) {
+        const targetToday = new Date(now);
+        targetToday.setHours(adjustedHour, 0, 0, 0);
+        
+        if (targetToday > now) {
+            targetDate = targetToday;
+        } else {
+            targetDate = findNextAllowedDay(now, daysArray, currentArrayIndex, adjustedHour);
+        }
+    } else {
+        targetDate = findNextAllowedDay(now, daysArray, currentArrayIndex, adjustedHour);
+    }
+    
+    function findNextAllowedDay(now, daysArray, currentArrayIndex, adjustedHour) {
+        for (let i = 1; i <= 7; i++) {
+            const nextArrayIndex = (currentArrayIndex + i) % 7;
+            if (daysArray[nextArrayIndex] === 1) {
+                const nextDate = new Date(now);
+                nextDate.setDate(now.getDate() + i);
+                nextDate.setHours(adjustedHour, 0, 0, 0);
+                return nextDate;
+            }
+        }
+        throw new Error('가능한 요일이 없습니다.');
+    }
+    
+    const diffInMs = targetDate - now;
+    if (diffInMs < 0) return '0시간 0분 0초 남음';
+    
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+    if (diffInHours >= 24) {
+        const days = Math.floor(diffInHours / 24);
+        return `D-${days}`;
+    } else {
+        const diffInSeconds = Math.floor(diffInMs / 1000);
+        const hours = Math.floor(diffInSeconds / 3600);
+        const minutes = Math.floor((diffInSeconds % 3600) / 60);
+        const seconds = diffInSeconds % 60;
+        return `${hours}시간 ${minutes}분 ${seconds}초 남음`;
+    }
+}
+setInterval(() => {
+    document.querySelector('#daily').innerHTML = getDday([1, 1, 1, 1, 1, 1, 0], 14);
+    document.querySelector('#fri').innerHTML = getDday([0, 0, 0, 0, 1, 0, 0], 14);
+    document.querySelector('#mentor').innerHTML = getDday([0, 1, 0, 1, 0, 0, 0], 19);
+    document.querySelector('#sat').innerHTML = getDday([0, 0, 0, 0, 0, 1, 0], 14);
+}, 1000);
+</script>
