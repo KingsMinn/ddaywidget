@@ -8,11 +8,12 @@
 <body>
     <!-- <h1>💡 Info</h1> -->
     <ul style="padding: 0;">
-        <li>데일리 퀴즈 <span class="count" id="daily"></span></li>
+        <li><span id="daily-name"></span> <span class="count" id="daily"></span></li>
         <li>멘토링 <span class="count" id="mentor"></span></li>
         <li>프로그래머스 <span class="count" id="fri"></span></li>
         <li>위클리 페이퍼 <span class="count" id="sat"></span></li>
-        <li class="f-12">진도 기록 시 ‘스프린트 미션’은 진행도에 따라 ‘레슨’ 값을 0~50으로 지정합니다.</li>
+        <li><b>프론트엔드 기초 프로젝트 </b><span class="count" id="prj"></span></li>
+        <!-- <li class="f-12">진도 기록 시 ‘스프린트 미션’은 진행도에 따라 ‘레슨’ 값을 0~50으로 지정합니다.</li> -->
     </ul>
 </body>
 </html>
@@ -46,13 +47,19 @@
         font-weight: 500;
     }
 
-    li span {
+    .count {
         background: rgb(247, 231, 255);
         border-radius: 100px;
         color: rgb(109, 0, 142);
         font-size: 14px;
         font-weight: 600;
         padding: 2px 14px;
+    }
+
+    b {
+        background: linear-gradient(45deg, rgb(80, 24, 221) 0%, rgb(163, 31, 215) 100%);
+        -webkit-background-clip: text;
+        color: transparent;
     }
     
 </style>
@@ -116,10 +123,48 @@ function getDday(daysArray, targetHour) {
         return `${hours}시간 ${minutes}분 ${seconds}초 남음`;
     }
 }
+
+function getTodayName(names, schedule, targetHour) {
+    const now = new Date();
+    const currentDay = now.getDay(); // 0(일) ~ 6(토)
+    
+    // 현재 날짜의 기준 시간 설정 (오늘 targetHour:00:00)
+    const todayTargetTime = new Date(now);
+    todayTargetTime.setHours(targetHour, 0, 0, 0);
+
+    // 만약 현재 시간이 기준 시간보다 이전이면, 이전 날을 기준으로 해야 함
+    let dayIndex = currentDay;
+    if (now < todayTargetTime) {
+        dayIndex = (currentDay - 1 + 7) % 7; // 하루 전 요일 (일요일이면 토요일로)
+    }
+
+    // 적용할 요일이 아닐 경우, 다음 적용 요일 찾기
+    while (schedule[dayIndex] === 0) {
+        dayIndex = (dayIndex + 1) % 7; // 다음 날로 이동
+    }
+
+    // 이름을 순환하면서 해당하는 인덱스를 찾음
+    const assignedIndex = dayIndex % names.length;
+    
+    return names[assignedIndex];
+}
+
+function getDaysUntil(year, month, day) {
+    const today = new Date();
+    const targetDate = new Date(year, month - 1, day); // month는 0부터 시작하므로 -1
+
+    const diffInMs = targetDate - today; // 밀리초 차이 계산
+    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24)); // 일로 변환
+
+    return diffInDays >= 0 ? `D-${diffInDays}` : 0; // 남은 일이 0일 미만이면 0 반환
+}
+
 setInterval(() => {
+    document.querySelector('#daily-name').innerHTML = `데일리 퀴즈 - ${getTodayName(['강희정', '김희성', '김승민', '이지은'], [1, 1, 1, 1, 1, 1, 0], 14)}`;
     document.querySelector('#daily').innerHTML = getDday([1, 1, 1, 1, 1, 1, 0], 14);
     document.querySelector('#fri').innerHTML = getDday([0, 0, 0, 0, 1, 0, 0], 14);
     document.querySelector('#mentor').innerHTML = getDday([0, 1, 0, 1, 0, 0, 0], 19);
     document.querySelector('#sat').innerHTML = getDday([0, 0, 0, 0, 0, 1, 0], 14);
+    document.querySelector('#prj').innerHTML = getDaysUntil(2025, 3, 6);
 }, 1000);
 </script>
