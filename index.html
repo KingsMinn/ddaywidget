@@ -160,7 +160,7 @@ function getDaysUntil(year, month, day) {
 }
 
 setInterval(() => {
-    document.querySelector('#daily-name').innerHTML = `데일리 퀴즈 - ${getTodayName(['강희정', '김희성', '김승민', '이지은'], [1, 1, 1, 1, 1, 1, 0], 14)}`;
+    document.querySelector('#daily-name').innerHTML = `데일리 퀴즈 - ${getTodayName(['김승민', '김희성', '강희정', '이지은'], [1, 1, 1, 1, 1, 1, 0], 14)}`;
     document.querySelector('#daily').innerHTML = getDday([1, 1, 1, 1, 1, 1, 0], 14);
     document.querySelector('#fri').innerHTML = getDday([0, 0, 0, 0, 1, 0, 0], 14);
     document.querySelector('#mentor').innerHTML = getDday([0, 1, 0, 1, 0, 0, 0], 19);
