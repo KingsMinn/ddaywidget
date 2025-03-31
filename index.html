@@ -11,6 +11,7 @@
         <li><span id="daily-name"></span> <span class="count" id="daily"></span></li>
         <li>멘토링 <span class="count" id="mentor"></span></li>
         <li>위클리 페이퍼 <span class="count" id="sat"></span></li>
+        <li>스프린트 미션 <span class="count" id="mon"></span></li>
         <li><b>프론트엔드 중급 프로젝트 </b><span class="count" id="prj"></span></li>
         <!-- <li class="f-12">진도 기록 시 ‘스프린트 미션’은 진행도에 따라 ‘레슨’ 값을 0~50으로 지정합니다.</li> -->
     </ul>
@@ -163,6 +164,7 @@ setInterval(() => {
     document.querySelector('#daily').innerHTML = getDday([1, 1, 1, 1, 1, 1, 0], 14);
     document.querySelector('#mentor').innerHTML = getDday([0, 1, 0, 1, 0, 0, 0], 19);
     document.querySelector('#sat').innerHTML = getDday([0, 0, 0, 0, 0, 1, 0], 14);
+    document.querySelector('#mon').innerHTML = getDday([1, 0, 0, 0, 0, 0, 0], 14);
     document.querySelector('#prj').innerHTML = getDaysUntil(2025, 4, 22);
 }, 1000);
 </script>
