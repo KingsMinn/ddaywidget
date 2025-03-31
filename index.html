@@ -10,9 +10,8 @@
     <ul style="padding: 0;">
         <li><span id="daily-name"></span> <span class="count" id="daily"></span></li>
         <li>멘토링 <span class="count" id="mentor"></span></li>
-        <li>프로그래머스 <span class="count" id="fri"></span></li>
         <li>위클리 페이퍼 <span class="count" id="sat"></span></li>
-        <li><b>프론트엔드 기초 프로젝트 </b><span class="count" id="prj"></span></li>
+        <li><b>프론트엔드 중급 프로젝트 </b><span class="count" id="prj"></span></li>
         <!-- <li class="f-12">진도 기록 시 ‘스프린트 미션’은 진행도에 따라 ‘레슨’ 값을 0~50으로 지정합니다.</li> -->
     </ul>
 </body>
@@ -160,11 +159,11 @@ function getDaysUntil(year, month, day) {
 }
 
 setInterval(() => {
-    document.querySelector('#daily-name').innerHTML = `데일리 퀴즈 - ${getTodayName(['김승민', '이지은', '강희정', '김희성'], [1, 1, 1, 1, 1, 1, 0], 14)}`;
+    document.querySelector('#daily-name').innerHTML = `데일리 퀴즈 - ${getTodayName(['최혜윤', '김성빈', '김승민', '방호영', '조지현'], [1, 1, 1, 1, 1, 1, 0], 14)}`;
     document.querySelector('#daily').innerHTML = getDday([1, 1, 1, 1, 1, 1, 0], 14);
     document.querySelector('#fri').innerHTML = getDday([0, 0, 0, 0, 1, 0, 0], 14);
     document.querySelector('#mentor').innerHTML = getDday([0, 1, 0, 1, 0, 0, 0], 19);
     document.querySelector('#sat').innerHTML = getDday([0, 0, 0, 0, 0, 1, 0], 14);
-    document.querySelector('#prj').innerHTML = getDaysUntil(2025, 3, 6);
+    document.querySelector('#prj').innerHTML = getDaysUntil(2025, 4, 22);
 }, 1000);
 </script>
